@@ -1,6 +1,6 @@
 import sys
 import os
-from io import BytesIO
+from io import BytesIO, BufferedReader
 import boto3
 
 from PIL import Image
@@ -42,3 +42,11 @@ class S3Functions:
             self.bucket_name,
             key
         )
+
+    def read_audio(self, key):
+        s3_object = self.s3.get_object(
+            Bucket=self.bucket_name,
+            Key=key
+        )['Body'].read()
+        b = BufferedReader(BytesIO(s3_object))
+        return b
